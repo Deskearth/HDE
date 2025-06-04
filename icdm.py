@@ -128,8 +128,6 @@ G_train, G_val, G_test, NODE_TYPE, type2idx = load_ACM(test_ratio=0.3)
 
 
 NUM_NEIGHBOR = 5
-mini_batch = []
-fea_batch = []
 
 EPOCH = 200
 BATCH_SIZE = 32
@@ -183,7 +181,8 @@ def type_encoder(node):
 
 def gen_fea_batch(G, root, fea_dict, hop):
     fea_batch = []
-    mini_batch.append([root])
+    # reset mini_batch for each call to avoid data leakage across batches
+    mini_batch = [[root]]
     # 两个相对位置的onehot
     if USE_DE:
         a = [0] * (K_HOP + 2) * 4 + type_encoder(root)
